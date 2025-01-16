@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/loginPage.css';
+import '../styles/LoginPage.css';
 import { FaKey, FaUser, FaUnlock } from "react-icons/fa";
 
 export default function LoginForm() {
