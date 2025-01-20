@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Auth.css';
-import { FaKey } from "react-icons/fa";
+import { FaKey, FaUserPlus } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { login } from '../services/AuthService.js';
+import { register } from '../services/AuthService.js';
+import {FiEye, FiEyeOff} from "react-icons/fi";
 
-export default function LoginForm() {
+export default function RegisterForm() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -17,8 +19,8 @@ export default function LoginForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await login({ email, password });
-            navigate('/');
+            await register({ firstName, lastName, email, password });
+            navigate('/login');
         } catch (error) {
             setError(error.response?.data?.message || 'An error occurred');
         }
@@ -32,8 +34,8 @@ export default function LoginForm() {
         <div>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <h1>Sign in</h1>
-                    <h2>Enter your credentials to sign in to the app manager panel</h2>
+                    <h1>Sign up</h1>
+                    <h2>Create your account to access the app manager panel</h2>
                 </div>
                 {error && (
                     <div className="error">
@@ -41,7 +43,29 @@ export default function LoginForm() {
                     </div>
                 )}
                 <div>
-                    <label htmlFor="email"><MdEmail className="icon" />Email</label>
+                    <label htmlFor="firstName"><FaUserPlus className="icon"/>First Name</label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        placeholder="Enter your first name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="lastName"><FaUserPlus className="icon"/>Last Name</label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        placeholder="Enter your last name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="email"><MdEmail className="icon"/>Email</label>
                     <input
                         type="email"
                         id="email"
@@ -52,7 +76,7 @@ export default function LoginForm() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password"><FaKey className="icon" />Password</label>
+                    <label htmlFor="password"><FaKey className="icon"/>Password</label>
                     <div className="password-input-container">
                         <input
                             type={showPassword ? "text" : "password"}
@@ -63,14 +87,13 @@ export default function LoginForm() {
                             required
                         />
                         <button type="button" onClick={togglePasswordVisibility}>
-                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                            {showPassword ? <FiEyeOff/> : <FiEye/>}
                         </button>
                     </div>
                 </div>
-                <button type="submit">Log In</button>
+                <button type="submit">Register</button>
                 <div className="footer">
-                    <a href="/forgot-password">Forgot your password?</a>
-                    <Link to="/register">Dont have an account? Sign up</Link>
+                    <a href="/login">Already have an account? Sign in</a>
                 </div>
             </form>
         </div>
